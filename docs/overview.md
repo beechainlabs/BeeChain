@@ -1,4 +1,4 @@
-# Monad execution overview
+# BeeChain execution overview
 
 ## Consensus and execution
 
@@ -22,12 +22,12 @@ Although the two components are typically called "consensus" and "execution",
 their source code repositories and command names are different for historical
 reasons:
 
-- The consensus repository is called [monad-bft](https://github.com/category-labs/monad-bft),
+- The consensus repository is called [beechain-bft](https://github.com/beechainlabs/beechain/beechain-bft),
   because its distributed consensus algorithm belongs to the Byzantine Fault
-  Tolerant family; the name of the consensus daemon binary is `monad-node`
+  Tolerant family; the name of the consensus daemon binary is `beechain-node`
 
-- The execution repository is just called [monad](https://github.com/category-labs/monad),
-  and the name of the execution daemon binary is also just `monad`
+- The execution repository is just called [beechain](https://github.com/beechainlabs/beechain),
+  and the name of the execution daemon binary is also just `beechain`
 
 ## How is execution used?
 
@@ -93,7 +93,7 @@ a simple loop that starts and ends with the consensus client:
 ```
 
 This organization helps explain why the consensus binary is called
-`monad-node`: even though a "Monad node" is really both daemons operating
+`beechain-node`: even though a "beechain node" is really both daemons operating
 together, it's clear in the diagram that execution is a local service that
 provides EVM and database services to consensus.
 
