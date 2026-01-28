@@ -1,0 +1,58 @@
+// Copyright (C) 2025 Category Labs, Inc.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+#pragma once
+
+#include <category/core/config.hpp>
+#include <category/core/result.hpp>
+#include <category/execution/ethereum/core/address.hpp>
+
+#include <cstdint>
+#include <optional>
+#include <span>
+
+enum monad_exec_account_access_context : uint8_t;
+
+MONAD_NAMESPACE_BEGIN
+
+struct CallFrame;
+struct Receipt;
+struct Transaction;
+
+class State;
+
+/// Record the transaction header events (TXN_HEADER_START, the EIP-2930
+/// and EIP-7702 events, and TXN_HEADER_END)
+void record_txn_header_events(
+    uint32_t txn_num, Transaction const &, Address const &sender,
+    std::span<std::optional<Address> const> authorities);
+
+/// Record TXN_EVM_OUTPUT, and all subsequent execution output events
+/// (TXN_LOG, TXN_CALL_FRAME, etc.)
+void record_txn_output_events(
+    uint32_t txn_num, Receipt const &, std::span<CallFrame const>,
+    State const &);
+
+/// Record TXN_REJECT or EVM_ERROR events depending on what happened during
+/// transaction execution
+void record_txn_error_event(
+    uint32_t txn_num, Result<Receipt>::error_type const &);
+
+/// Record all account state accesses (both reads and writes) described by a
+/// State object
+void record_account_access_events(
+    monad_exec_account_access_context, State const &);
+
+MONAD_NAMESPACE_END
